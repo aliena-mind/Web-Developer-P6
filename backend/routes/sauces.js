@@ -12,15 +12,15 @@ const saucesCtrl = require('../controllers/sauces'); // ajout du controller sauc
 router.get('/', auth, saucesCtrl.getAllSauce);
 
 // middleware POST, poste une nouvelle sauce sur la base de données
-router.post('/', auth, multer, saucesCtrl.createThing);
+router.post('/', auth, multer, saucesCtrl.createSauce);
 
 // middleware GET, obtient les données de la sauce choisi disponible sur la base de données
-router.get('/:id', auth, saucesCtrl.getOneThing);
+router.get('/:id', auth, saucesCtrl.getOneSauce);
 
 // middleware PUT, modifie les données de la sauce choisi sur la base de données
-router.put('/:id', auth, multer, saucesCtrl.modifyThing);
+router.put('/:id', auth, multer, saucesCtrl.modifySauce);
 
 // middleware DELETE, supprime la sauce choisi de la base de données
-router.delete('/:id', auth, saucesCtrl.deleteThing);
+router.delete('/:id', auth, saucesCtrl.deleteSauce);
 
 module.exports = router; 

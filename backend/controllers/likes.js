@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const Thing = require('../models/Thing'); // importation de la constante 'Thing'
+const Sauce = require('../models/Sauce'); // importation de la constante 'Sauce'
 
 exports.getLikes = (req, res, next) => {
     

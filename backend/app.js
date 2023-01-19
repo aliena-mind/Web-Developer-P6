@@ -31,7 +31,10 @@ app.use((req, res, next) => {
 });
 
 // définit le chemin du routeur 'saucesRoutes' (routeur général)
-app.use('/api/sauces', saucesRoutes, likesRoutes);
+app.use('/api/sauces', saucesRoutes);
+
+// définit le chemin du routeur 'likesRoutes'
+app.use('/api/sauces', likesRoutes);
 
 // définit le chemin du router 'userRoutes' 
 app.use('/api/auth', userRoutes);
