@@ -3,19 +3,19 @@ const fs = require('fs');
 const Thing = require('../models/Thing'); // importation de la constante 'Thing'
 
 exports.createThing = (req, res, next) => { // objet de la requête en chaine de caractère JSON
-    const thingObject = JSON.parse(req.body.thing); // transforme en objet JS
-    delete thingObject._id; // suppression de l'id car il sera généré par la base de données
-    delete thingObject._userId; // suppression de l'UserId qui ne provient pas de la base de données
-    const thing = new Thing({ // création de l'objet
-        ...thingObject,
-        userId: req.auth.userId, // récupéré via le middleware
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // génère l'url 
-    });
-    console.log(thing);
-  
-    thing.save() // enregistrement de l'objet dans la base de données
-    .then(() => { res.status(201).json({message: 'Objet enregistré !'})})
-    .catch(error => { res.status(400).json( { error })})
+  const thingObject = JSON.parse(req.body.thing); // transforme en objet JS
+  delete thingObject._id; // suppression de l'id car il sera généré par la base de données
+  delete thingObject._userId; // suppression de l'UserId qui ne provient pas de la base de données
+  const thing = new Thing({ // création de l'objet
+      ...thingObject,
+      userId: req.auth.userId, // récupéré via le middleware
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // génère l'url 
+  });
+  console.log(thing);
+
+  thing.save() // enregistrement de l'objet dans la base de données
+  .then(() => { res.status(201).json({message: 'Objet enregistré !'})})
+  .catch(error => { res.status(400).json( { error })})
 };
 
 exports.getOneThing = (req, res, next) => {
