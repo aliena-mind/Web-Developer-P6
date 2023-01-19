@@ -1,4 +1,4 @@
-// enregistres les images arrivant depuis le frontend dans le dossier 'image'
+// enregistres les images arrivant depuis le frontend dans le dossier 'images'
 
 const multer = require('multer'); // ajout de multer
 

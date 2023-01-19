@@ -7,6 +7,8 @@ app.use(express.json());
 // ajout des routers
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
+const likesRoutes = require('./routes/likes');
+
 const path = require('path');
 
 const mongoose = require('mongoose'); // ajout de mongoose
@@ -29,12 +31,12 @@ app.use((req, res, next) => {
 });
 
 // définit le chemin du routeur 'saucesRoutes' (routeur général)
-app.use('/api/sauces', saucesRoutes);
+app.use('/api/sauces', saucesRoutes, likesRoutes);
 
-// définit le chemin du router 'userRoutes'
+// définit le chemin du router 'userRoutes' 
 app.use('/api/auth', userRoutes);
 
-// définit le chemin du router 'userRoutes'
+// 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
