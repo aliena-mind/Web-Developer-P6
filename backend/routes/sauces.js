@@ -23,4 +23,4 @@ router.put('/:id', auth, multer, saucesCtrl.modifySauce);
 // middleware DELETE, supprime la sauce choisi de la base de données
 router.delete('/:id', auth, saucesCtrl.deleteSauce);
 
-module.exports = router; 
+module.exports = router; // exportation du routeur

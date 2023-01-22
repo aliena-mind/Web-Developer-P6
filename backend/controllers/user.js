@@ -12,7 +12,7 @@ exports.signup = (req, res, next) => {
             email: req.body.email,          // récupération de l'e-mail dans le body de la requête
             password: hash                  // enregistrement du mdp crypté
             });
-            user.save()                 // enregistrement dans la base de données :
+            user.save()                     // enregistrement dans la base de données :
             .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
             .catch(error => res.status(400).json({ error }));
         })
@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
 // connexion de l'utilisateur
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) 
-        .then(user => { // récupérationde la valeur trouvée par la requête
+        .then(user => { // récupération de la valeur trouvée par la requête
             if (user === null) { // si la valeur est nulle :
                 return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
             }

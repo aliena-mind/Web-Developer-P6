@@ -3,29 +3,30 @@ const fs = require('fs');
 const Sauce = require('../models/Sauce'); // importation de la constante 'Sauce'
 
 exports.createSauce = (req, res, next) => { // objet de la requête en chaine de caractère JSON
+  
   const sauceObject = JSON.parse(req.body.sauce); // transforme en objet JS
-  delete sauceObject._id; // suppression de l'id car il sera généré par la base de données
-  delete sauceObject._userId; // suppression de l'UserId qui ne provient pas de la base de données
+  
   const sauce = new Sauce({ // création de l'objet
-      ...sauceObject,
-      userId: req.auth.userId, // récupéré via le middleware
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // génère l'url 
+    ...sauceObject,
+    userId: req.auth.userId, // récupéré via le middleware auth
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`// génère l'url 
   });
-  console.log(sauce);
-
+ 
   sauce.save() // enregistrement de l'objet dans la base de données
   .then(() => { res.status(201).json({message: 'Objet enregistré !'})})
   .catch(error => { res.status(400).json( { error })})
 };
 
-exports.getOneSauce = (req, res, next) => {
-  Sauce.findOne({
-    _id: req.params.id
-  }).then(
+exports.getOneSauce = (req, res, next) => { // obtenir une sauce depuis la base de données
+  Sauce.findOne({ 
+    _id: req.params.id // récupère l'id dans les paramètres de recherche et cherche l'id correspondant dans la base de données
+  })
+  .then( // si succès :
     (sauce) => {
       res.status(200).json(sauce);
     }
-  ).catch(
+  )
+  .catch( // si echec :
     (error) => {
       res.status(404).json({
         error: error
