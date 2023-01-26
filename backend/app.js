@@ -11,12 +11,14 @@ const likesRoutes = require('./routes/likes');
 
 const path = require('path');
 
+require("dotenv").config({ path: "./config/.env" }); // ajout du package npm 'dotenv' pour la sécurité 
+
 const mongoose = require('mongoose'); // ajout de mongoose
 
 mongoose.set('strictQuery', false); // suppression erreur console
 
 // connexion à la base de données MongoDB
-mongoose.connect('mongodb+srv://aliena-mind:12345@p6.aqzokxo.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://' + process.env.MONGODB_USER_PASS + '@p6.aqzokxo.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

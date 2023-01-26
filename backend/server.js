@@ -1,22 +1,24 @@
 const http = require('http'); // importation du package 'http'
 
-const app = require('./app'); 
+const app = require('./app'); // importation de l'app
 
-const normalizePort = val => {
-  const port = parseInt(val, 10);
+const normalizePort = val => { // normalisation des ports
 
-  if (isNaN(port)) {
+  const port = parseInt(val, 10); // parse la chaine de caractères 'port"
+
+  if (isNaN(port)) { // si le port n'est pas un nombre :
     return val;
   }
-  if (port >= 0) {
+  if (port >= 0) { // si le port est supérieur ou égal à zéro :
     return port;
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
 
-const errorHandler = error => {
+const port = normalizePort(process.env.PORT); // récupération et normalisation du port depuis le fichier '.env'
+app.set('port', port);  // défini le 'port'
+
+const errorHandler = error => { // en cas d'erreur :
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -36,13 +38,13 @@ const errorHandler = error => {
   }
 };
 
-const server = http.createServer(app);
+const server = http.createServer(app); // création du server
 
-server.on('error', errorHandler);
-server.on('listening', () => {
+server.on('error', errorHandler); 
+server.on('listening', () => {  
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Listening on ' + bind);
+  console.log('Listening on ' + bind); 
 });
 
 server.listen(port); // écoute du port 

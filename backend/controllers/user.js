@@ -37,7 +37,7 @@ exports.login = (req, res, next) => {
                             userId: user._id,
                             token: jwt.sign( // appel de la fonction sign de jsonwebtoken, qui encode le payload (les données)
                                 { userId: user._id },   // objet userID
-                                'RANDOM_TOKEN_SECRET',  // clée secrète pour l'encodage
+                                process.env.TOKEN_KEY,  // clée secrète pour l'encodage appelée depuis le fichier '.env'
                                 { expiresIn: '24h' }    // temps d'expiration
                             )
                         });
