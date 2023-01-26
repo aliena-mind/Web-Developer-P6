@@ -35,21 +35,36 @@ exports.getOneSauce = (req, res, next) => { // obtenir une sauce depuis la base 
   );
 };
 
-exports.modifySauce = (req, res, next) => {
-  const sauceObject = req.file ? { // vérifie s'il y à un champ file
-    ...JSON.parse(req.body.sauce), // parse la chaine de caractère JSON 
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`// génère l'url
+exports.modifySauce = (req, res, next) => { // modifier une sauce stockée sur la base de données
+  const sauceObject = req.file ? {                    // vérifie s'il y à un champ file
+    ...JSON.parse(req.body.sauce),                    // parse la chaine de caractère JSON 
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`  // génère l'url
   } : { ...req.body }; // sinon on récupère l'objet dans le body de la requête
 
-  delete sauceObject._userId; // suppression de l'userID pour eviter les fraudes d'id
   Sauce.findOne({_id: req.params.id}) // cherche l'objet dans la base de données
     .then((sauce) => { // si succès :
       if (sauce.userId != req.auth.userId) { // récupère l'objet et vérifie que l'userId est != de l'userId du token
         res.status(401).json({ message : 'Not authorized'}); // 401 : erreur d'authentification
       } else {
-        Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id}) // définit l'enregistrement à mettre à jour avec quel objet (le body de de notre fonction et l'id venant des params de l'url)
-        .then(() => res.status(200).json({message : 'Objet modifié!'})) // si succès :
-        .catch(error => res.status(401).json({ error })); // 401 : erreur d'authentification
+
+        // console.log('req.file');
+        // console.log(req.file);
+
+        if (req.file !== undefined) { // si il y a un fichier 'image' : 
+
+          const filename = sauce.imageUrl.split('/images/')[1]; // récupère le nom du fichier
+          fs.unlink(`images/${filename}`, () => { // méthode unlink de 'fs' pour supprimer le fichier de l'image précédente stockée par le multer
+            Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id}) // définit l'enregistrement à mettre à jour avec quel objet (le body de de notre fonction et l'id venant des params de l'url)
+            .then(() => res.status(200).json({message : 'Objet modifié!'})) // si succès :
+            .catch(error => res.status(401).json({ error })); // 401 : erreur d'authentification
+          });
+        }
+        else if (req.file == undefined) { // si il n'y a pas de fichier 'image' :
+          
+          Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id}) // définit l'enregistrement à mettre à jour avec quel objet (le body de de notre fonction et l'id venant des params de l'url)
+          .then(() => res.status(200).json({message : 'Objet modifié!'})) // si succès :
+          .catch(error => res.status(401).json({ error })); // 401 : erreur d'authentification
+        }
       }
     })
     .catch((error) => {
@@ -57,14 +72,14 @@ exports.modifySauce = (req, res, next) => {
     });
 };
 
-exports.deleteSauce = (req, res, next) => {
+exports.deleteSauce = (req, res, next) => { // supprimer une sauce stockée sur la base de données
   Sauce.findOne({ _id: req.params.id}) // récupères l'objet en base de données
     .then(sauce => { // si succès
       if (sauce.userId != req.auth.userId) { // si l'userId correspond à l'userId du token
         res.status(401).json({message: 'Not authorized'}); // 401 : erreur d'authentification
       } else { // sinon
         const filename = sauce.imageUrl.split('/images/')[1]; // récupère le nom du fichier
-        fs.unlink(`images/${filename}`, () => { // méthode unlink de 'fs' pour supprimer le nom de fichier
+        fs.unlink(`images/${filename}`, () => { // méthode unlink de 'fs' pour supprimer l'image stockée par le multer
           Sauce.deleteOne({_id: req.params.id}) // suppression de l'objet dans la base de donnée
             .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
             .catch(error => res.status(401).json({ error }));
@@ -76,7 +91,7 @@ exports.deleteSauce = (req, res, next) => {
     });
 };
 
-exports.getAllSauce = (req, res, next) => {
+exports.getAllSauce = (req, res, next) => { // obtenir toutes les sauces disponible sur la base de données
   Sauce.find().then(
     (sauces) => {
       res.status(200).json(sauces);
