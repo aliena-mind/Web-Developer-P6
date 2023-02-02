@@ -1,24 +1,24 @@
-const express = require('express'); // ajout d'express
+const express = require('express'); // importe le module Express.js dans l'application
 
-const app = express();
+const app = express();  // crée une instance de l'application Express
 
-app.use(express.json()); 
+app.use(express.json()); //  configure l'application pour utiliser le format JSON pour les données envoyées par les requêtes HTTP
 
 // ajout des routers
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 const likesRoutes = require('./routes/likes');
 
-const path = require('path');
+const path = require('path'); // importe le module path, qui fournit des fonctions pour travailler avec les chemins dans le système de fichiers
 
-require("dotenv").config({ path: "./config/.env" }); // ajout du package npm 'dotenv' pour la sécurité 
+require("dotenv").config({ path: "./config/.env" }); // importe le module dotenv pour lire les variables d'environnement du fichier .env dans le répertoire config
 
-const mongoose = require('mongoose'); // ajout de mongoose
+const mongoose = require('mongoose'); // importe le module Mongoose qui permet de travailler avec MongoDB en utilisant une interface orientée objet
 
-mongoose.set('strictQuery', false); // suppression erreur console
+mongoose.set('strictQuery', false); // suppression erreur 
 
-// connexion à la base de données MongoDB
-mongoose.connect('mongodb+srv://' + process.env.MONGODB_USER_PASS + '@p6.aqzokxo.mongodb.net/?retryWrites=true&w=majority',
+// connexion à la base de données MongoDB en utilisant les informations d'authentification définies dans les variables d'environnement
+mongoose.connect('mongodb+srv://' + process.env.MONGODB_USER_PASS + process.env.MONGODB_LINK,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -41,7 +41,7 @@ app.use('/api/sauces', likesRoutes);
 // définit le chemin du router 'userRoutes' 
 app.use('/api/auth', userRoutes);
 
-// 
+// définit le dossier 'images' pour le multer
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
