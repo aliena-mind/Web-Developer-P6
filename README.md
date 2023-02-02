@@ -1,19 +1,11 @@
-Avant de commencer :
----------------------------------------------------------------------------
+## Avant de commencer :
 
-1) Cloner le frontend du projet depuis le repository suivant :
+1. Ouvrir le terminal sur le dossier frontend :
 
-https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
----------------------------------------------------------------------------
+## run 'npm start'
 
-2) Ouvrir le terminal sur le dossier frontend : 
+2. Ouvrir le terminal sur le dossier backend :
 
-run 'npm start' 
----------------------------------------------------------------------------
-
-3) Ouvrir le terminal sur le dossier backend : 
-
-run 'nodemon server'
----------------------------------------------------------------------------
+## run 'nodemon server'
 
 ###########################################################################
